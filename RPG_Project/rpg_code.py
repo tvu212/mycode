@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-# Replace RPG starter project with this code when new instructions are live
+# Updates added a starting health value.
+# Added user [item] function to use items
 
 def showInstructions():
   #print a main menu and the commands
@@ -10,11 +11,13 @@ RPG Game
 Commands:
   go [direction]
   get [item]
+  use [item]
 ''')
 
 def showStatus():
   #print the player's current status
   print('---------------------------')
+  print("Current health is " + str(health))
   print('You are in the ' + currentRoom)
   #print the current inventory
   print('Inventory : ' + str(inventory))
@@ -22,6 +25,9 @@ def showStatus():
   if "item" in rooms[currentRoom]:
     print('You see a ' + rooms[currentRoom]['item'])
   print("---------------------------")
+
+#Starting Player Health
+health = 20
 
 #an inventory, which is initially empty
 inventory = []
@@ -33,7 +39,7 @@ rooms = {
             'Hall' : {
                   'south' : 'Kitchen',
                   'east'  : 'Dining Room',
-                  'item'  : 'key'
+                  'item'  : 'key',
                 },
 
             'Kitchen' : {
@@ -47,13 +53,32 @@ rooms = {
                   'north' : 'Pantry',
                },
             'Garden' : {
-                  'north' : 'Dining Room'
+                  'north' : 'Dining Room',
+                  'south' : 'TEST ROOM'
                },
             'Pantry' : {
                   'south' : 'Dining Room',
                   'item' : 'cookie',
-            }
+            },
+            'TEST ROOM' : {}
          }
+
+
+
+#function which will define all item functions
+
+def itemfunc(item):
+    if item == "potion":
+        global health
+        health = health + 5
+        print("You have healed 5 health!!")
+        inventory.remove("potion")
+    if item == "cookie":
+        print("The yummy cookie has invigorated your spirits")
+        inventory.remove("cookie")
+
+
+
 
 #start the player in the Hall
 currentRoom = 'Hall'
@@ -101,11 +126,19 @@ while True:
     else:
       #tell them they can't get it
       print('Can\'t get ' + move[1] + '!')
-      
-  ## Define how a player can win
+
+  #if they try to use something in their inventory
+  if move[0] == "use":
+      if move[1] in inventory:
+          itemfunc(move[1])
+      else:
+          print(move[1] + " is not in inventory")
+  
+
+  ## Definedsdsds how a player can win
   if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
     print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
-    break
+    breakd
 
   ## If a player enters a room with a monster
   elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
