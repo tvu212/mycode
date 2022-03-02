@@ -6,12 +6,13 @@ import requests
 import csv
 import json
 import datetime
-
+import os
 
 ##declared variables##
 city = "seattle"
 api_key = "ab4f8a1a1bce3082d408c58e4a6586ca"
-csvheader = ['TEMP','CONDITION','SUNSET TIME']
+csvheader = ['TEMP','CONDITION','CURRENT TIME']
+os.chdir('/home/student/mycode/Project_Code/')
 
 
 
@@ -31,7 +32,7 @@ def get_data(response):
     now = datetime.datetime.now()
     difference = sunset_time - now
 
-    return [temp,condition,sunset_time]
+    return [temp,condition,now]
 
 
 
@@ -45,18 +46,36 @@ def get_json(city, api_key):
     response = requests.get(url).json()    ## returns a dict
     weatherdata = json.dumps(response, indent=4) ## returns data in readable format str
     return response
-  
+
+
+
+def temp_check(data, output_file):
+    if data[0] < 32.00:
+        output_file.write(f"It is a freezing {data[0]} degrees out there!")
+    if data[0] > 100.00:
+        output_file.write(f"Holy shit its {data[0]} degrees outside!! Remember to hydrate!")
+    else:
+        output_file.write(f"Not too hot not too cold right now\n")
+
 
     
 def main():
+
+
     response = get_json(city, api_key)
     data = get_data(response)
-    with open('test.csv', 'a', encoding='UTF8', newline='') as f:
 
+
+    with open('test.csv', 'a', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
         ##writer.writerow(csvheader)
         writer.writerow(data)
-        f.close()
+        
+
+
+    with open ('output_file.txt', 'w', encoding='UTF8', newline='') as output_file:
+        temp_check(data,output_file)
+
     
 
 
