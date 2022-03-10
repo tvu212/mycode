@@ -17,7 +17,7 @@ import smtplib
 city = "seattle"
 api_key = "ab4f8a1a1bce3082d408c58e4a6586ca"
 csvheader = ['TEMP','CONDITION','CURRENT TIME']
-os.chdir('/home/student/mycode/Project_Code/')
+os.chdir(r'C:\Users\tvu21\OneDrive\Desktop\Python\mycode\Project_Code')
 
 
 
